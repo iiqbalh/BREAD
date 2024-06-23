@@ -15,7 +15,21 @@ app.use(bodyParser.json())
 
 
 app.get('/', (req, res) => {
-    res.render('read')
+    db.all('SELECT * FROM data', (err, rows) => {
+        if (err) return res.send(err)
+        res.render('read', { rows })
+    })
+})
+
+app.get('/add', (req, res) => {
+    res.render('form')
+})
+
+app.get('/edit', (req, res) => {
+    db.all('SELECT * FROM data', (err, rows) => {
+        if (err) return res.send(err)
+        res.render('form', { rows })
+    })
 })
 
 app.listen(3000, () => {
