@@ -20,28 +20,26 @@
                 <h2>SQLite BREAD(Browse, Read, Edit, Add, Delete) and Pagination</h2>
             </div>
 
-            <form action="/add" method="post">
+            <form action="" method="get">
                 <div class="card-body">
                     <div class="row mb-3">
                         <label for="name" class="col-sm-2 col-form-label" style="text-align: start">Name</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="name" placeholder="insert your name" required>
+                            <input type="text" class="form-control" name="name" placeholder="insert your name">
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label for="height" class="col-sm-2 col-form-label" style="text-align: start">Height</label>
                         <div class="col-sm-10">
-                            <input type="number" class="form-control" id="height" placeholder="insert your height"
-                                required>
+                            <input type="number" class="form-control" name="height" placeholder="insert your height">
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label for="weight" class="col-sm-2 col-form-label" style="text-align: start">Weight</label>
                         <div class="col-sm-10">
-                            <input type="number" class="form-control" id="weight" placeholder="insert your height"
-                                required>
+                            <input type="number" class="form-control" name="weight" placeholder="insert your height">
                         </div>
                     </div>
 
@@ -50,10 +48,10 @@
                             Date</label>
                         <div class="col-sm-10"
                             style="box-sizing: border-box; display: flex; justify-content: space-evenly; width: 83,5%;">
-                            <input type="date" class="form-control" id="birthdate-str" name="birthdate-str" required
+                            <input type="date" class="form-control" name="dateStr"
                                 style="width: 40%;">
                             <p style="width: 20%;">s.d.</p>
-                            <input type="date" class="form-control" id="birthdate-end" name="birthdate-end" required
+                            <input type="date" class="form-control" name="dateEnd"
                                 style="width: 40%">
                         </div>
                     </div>
@@ -62,18 +60,19 @@
                         <label for="married" class="col-sm-2 col-form-label" style="text-align: start">Is
                             Married</label>
                         <div class="col-sm-10">
-                            <select class="form-control" id="married" name="married" required>
+                            <select class="form-control" name="isMarried">
                                 <option selected>-select married-</option>
-                                <option value="true">true</option>
-                                <option value="false">false</option>
+                                <option value="0" <%= rows.married === 0 ? selected : '' %>>Not Yet</option>
+                                <option value="1" <%= rows.married === 1 ? selected : '' %>>Yes</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="row mb-3">
-                        <label for="selected" class="col-sm-2 col-form-label" style="text-align: start">Operation</label>
+                        <label for="selected" class="col-sm-2 col-form-label"
+                            style="text-align: start">Operation</label>
                         <div class="col-sm-10" style="display: flex; justify-items: end; align-items: center;">
-                            <input type="radio" id="or" style="margin: 5px 5px 5px 0px;" required>OR
+                            <input type="radio" id="or" style="margin: 5px 5px 5px 0px;">OR
                             <input type="radio" id="and" style="margin: 5px 5px 5px 15px;">AND
                         </div>
                     </div>
@@ -119,11 +118,12 @@
                             <%= value.birthdate %>
                         </td>
                         <td>
-                            <%= value.married === true ? 'Yes' : 'Not Yet' %>
+                            <%= value.married === 1 ? 'Yes' : 'Not Yet' %>
                         </td>
                         <td>
                             <a href="/edit/<%= index %>" class="btn btn-success">Update</a>
-                            <a href="/delete/<%= index %>" class="btn btn-danger" onclick="return notif('<%= value.name %>')">Delete</a>
+                            <a href="/delete/<%= index %>" class="btn btn-danger"
+                                onclick="return notif('<%= value.name %>')">Delete</a>
                         </td>
                         <% }) %>
 
