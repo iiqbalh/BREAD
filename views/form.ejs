@@ -20,12 +20,12 @@
                 <h2>Adding Data</h2>
             </div>
 
-            <form action="/add" method="post">
+            <form action="" method="post">
                 <div class="card-body">
                     <div class="row mb-3">
                         <label for="name" class="col-sm-2 col-form-label" style="text-align: start">Name</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="name" value="<%= rows.name %>"
+                            <input type="text" class="form-control" name="name" value="<%= rows.name %>"
                                 placeholder="insert your height" required>
                         </div>
                     </div>
@@ -33,7 +33,7 @@
                     <div class="row mb-3">
                         <label for="height" class="col-sm-2 col-form-label" style="text-align: start">Height</label>
                         <div class="col-sm-10">
-                            <input type="number" class="form-control" id="height" value="<%= rows.height %>""
+                            <input type="number" class="form-control" name="height" value="<%= rows.height %>""
                             placeholder=" insert your height" required>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                     <div class="row mb-3">
                         <label for="weight" class="col-sm-2 col-form-label" style="text-align: start">Weight</label>
                         <div class="col-sm-10">
-                            <input type="number" class="form-control" id="weight" value="<%= rows.weight %>"
+                            <input type="number" step="0.001" class="form-control" name="weight" value="<%= rows.weight %>"
                                 placeholder="insert your height" required>
                         </div>
                     </div>
@@ -50,7 +50,7 @@
                         <label for="birthdate" class="col-sm-2 col-form-label" style="text-align: start">Birth
                             Date</label>
                         <div class="col-sm-10">
-                            <input type="date" class="form-control" id="birthdate" name="birthdate"
+                            <input type="date" class="form-control" name="birthdate"
                                 value="<%= rows.birthdate %>" placeholder="insert your height" required
                                 style="width: 100%;">
                         </div>
@@ -62,24 +62,23 @@
 
                         <div class="col-sm-10">
                             <div style="text-align: start;">
-                                <input type="radio" id="notYet" style="margin: 5px 5px 5px 0px;" required>
+                                <input type="radio" name="isMarried" value="0" style="margin: 5px 5px 5px 0px;" required>
                                 <label for="false">Not Yet</label>
                             </div>
 
                             <div style="text-align: start;">
-                                <input type="radio" id="yes" style="margin: 5px 5px 5px 0px;">
+                                <input type="radio" name="isMarried" value="1" style="margin: 5px 5px 5px 0px;">
                                 <label for="true">Yes</label>
                             </div>
                         </div>
 
                     </div>
                 </div>
+                <div class="card-footer text-body-secondary">
+                    <button type="submit" class="btn btn-primary" style="display: flex; float: left; margin: 5px;">Save</button>
+                    <a href="/" class="btn btn-warning" style="display: flex; float: left; margin: 5px;">Back</a>
+                </div>
             </form>
-
-            <div class="card-footer text-body-secondary">
-                <a href="/add" class="btn btn-primary" style="display: flex; float: left; margin: 5px;">Save</a>
-                <a href="/" class="btn btn-warning" style="display: flex; float: left; margin: 5px;">Back</a>
-            </div>
         </div>
     </div>
 </body>

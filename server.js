@@ -15,7 +15,8 @@ app.use(bodyParser.json())
 
 
 app.get('/', (req, res) => {
-    const { name, height, weight, starDate, endDate, isMarried } = req.query;
+
+    const { name, height, weight, starDate, endDate, isMarried, search } = req.query;
 
     const wheres = [];
     const params = [];
@@ -55,15 +56,27 @@ app.get('/', (req, res) => {
         params.push(isMarried)
     }
 
-    let sql = 'SELECT * FROM data';
+    const page = req.query.page
+    const limit = 5
+    const offset = (page - 1) * limit
+
+    let sql = 'SELECT COUNT(*) AS total FROM data';
+    let sqlCount = 'SELECT * FROM data ORDER BY id LIMIT ? OFFSET ?';
 
     if (wheres.length > 0) {
-        sql += ` WHERE ${wheres}`
+        sql += ` WHERE ${wheres.join(` ${search} `)}`
+        sqlCount += ` WHERE ${wheres.join(` ${search} `)}`
     }
 
     db.all(sql, params, (err, rows) => {
         if (err) return res.send(err)
-        res.render('read', { rows })
+        const total = rows[0].total
+        const pages = math.ceil(total / limit)
+
+        db.all(sqlCount, [limit, offset], (err, rows) => {
+            if (err) return res.send(err)
+            res.render('read', { rows, pages ,query: req.query })
+        })
     })
 })
 
@@ -71,15 +84,14 @@ app.get('/add', (req, res) => {
     res.render('form', { rows: {} })
 })
 
-// app.get('/edit/:index', (req, res) => {
-//     const id = req.params.index || 1
-//     console.log(id)
+app.post('/add', (req, res) => {
 
-//     db.all('SELECT * FROM data WHERE id = ?' [id], (err, rows) => {
-//         if (err) return res.send(err)
-//         res.render('form', { rows })
-//     })
-// })
+    db.run('INSERT INTO data (name, height, weight, birthdate, married) VALUES (?, ?, ?, ?, ?)',
+     [req.body.name, req.body.height, req.body.weight, req.body.birthdate, req.body.isMarried], (err) => {
+        if(err) res.send(err)
+        else res.redirect('/')
+    })
+})
 
 app.listen(3000, () => {
     console.log('Example app listening on port 3000')
