@@ -61,8 +61,8 @@
                         <div class="col-sm-10">
                             <select class="form-control" name="isMarried">
                                 <option disabled selected>-select married-</option>
-                                <option value="0" <%= rows.married ===0 ? selected : '' %>>Not Yet</option>
-                                <option value="1" <%= rows.married ===1 ? selected : '' %>>Yes</option>
+                                <option value="0" <%=rows.married===0 ? selected : '' %>>Not Yet</option>
+                                <option value="1" <%=rows.married===1 ? selected : '' %>>Yes</option>
                             </select>
                         </div>
                     </div>
@@ -70,16 +70,22 @@
                     <div class="row mb-3">
                         <label for="selected" class="col-sm-2 col-form-label"
                             style="text-align: start">Operation</label>
-                        <div class="col-sm-10" style="display: flex; justify-items: end; align-items: center;">                        
-                            <% if(query.search=='or') { %>
-                                <input type="radio" id="or" name="search" value="or" style="margin: 5px 5px 5px 0px;"  checked />OR
-                                <input type="radio" id="and" name="search" value="and" style="margin: 5px 5px 5px 15px;"/>AND
-                                <% } else if(query.type_search=="and") { %>
-                                    <input type="radio" id="or" name="search" value="or" style="margin: 5px 5px 5px 0px;" />OR
-                                    <input type="radio" id="and" name="search" value="and" style="margin: 5px 5px 5px 15px;" checked />AND
+                        <div class="col-sm-10" style="display: flex; justify-items: end; align-items: center;">
+                            <% if(query.search=='or' ) { %>
+                                <input type="radio" id="or" name="search" value="or" style="margin: 5px 5px 5px 0px;"
+                                    checked />OR
+                                <input type="radio" id="and" name="search" value="and"
+                                    style="margin: 5px 5px 5px 15px;" />AND
+                                <% } else if(query.type_search=="and" ) { %>
+                                    <input type="radio" id="or" name="search" value="or"
+                                        style="margin: 5px 5px 5px 0px;" />OR
+                                    <input type="radio" id="and" name="search" value="and"
+                                        style="margin: 5px 5px 5px 15px;" checked />AND
                                     <% } else { %>
-                                        <input type="radio" id="or" name="search" value="or" style="margin: 5px 5px 5px 0px;" required/>OR
-                                        <input type="radio" id="and" name="search" value="and" style="margin: 5px 5px 5px 15px;" />AND
+                                        <input type="radio" id="or" name="search" value="or"
+                                            style="margin: 5px 5px 5px 0px;" required />OR
+                                        <input type="radio" id="and" name="search" value="and"
+                                            style="margin: 5px 5px 5px 15px;" />AND
                                         <% } %>
                         </div>
                     </div>
@@ -128,8 +134,8 @@
                             <%= value.married===1 ? 'Yes' : 'Not Yet' %>
                         </td>
                         <td>
-                            <a href="/edit/<%= index %>" class="btn btn-success">Update</a>
-                            <a href="/delete/<%= index %>" class="btn btn-danger"
+                            <a href="/edit/<%= value.id %>" class="btn btn-success">Update</a>
+                            <a href="/delete/<%= value.id%>" class="btn btn-danger"
                                 onclick="return notif('<%= value.name %>')">Delete</a>
                         </td>
                         <% }) %>
@@ -143,27 +149,37 @@
 
                 <nav aria-label="Page navigation example" style="display: flex; float: right;">
                     <ul class="pagination">
-                      <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous">
-                          <span aria-hidden="true">&laquo;</span>
-                        </a>
-                      </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
 
-                      <% for(let i = 1; i <= pages; i++) { %>
-                      <li class="page-item"><a class="page-link" href="?page=<%= i %>"><%= i %></a></li>
-                      <% } %>
+                        <% for(let i=1; i <=pages; i++) { %>
+                            <li class="page-item"><a class="page-link" href="?page=<%= i %>">
+                                    <%= i %>
+                                </a></li>
+                            <% } %>
 
-                      <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
-                          <span aria-hidden="true">&raquo;</span>
-                        </a>
-                      </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
                     </ul>
-                  </nav>
-
+                </nav>
             </div>
         </div>
     </div>
+
+    <script>
+        function notif(name) {
+            const answer = confirm(`Apakah kamu yakin akan menghapus data '${name}' ?`);
+            if (answer) return true
+            else return false
+
+        }
+    </script>
 </body>
 
 </html>

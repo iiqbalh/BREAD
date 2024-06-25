@@ -79,8 +79,8 @@ app.get('/', (req, res) => {
         const pages = Math.ceil(total / limit)
 
         db.all(sql, params, (err, rows) => {
-            if (err) return res.send(err)
-            res.render('read', { rows, pages, offset, query: req.query })
+            if (err) res.send(err)
+            else res.render('read', { rows, pages, offset, query: req.query })
         })
     })
 })
@@ -101,7 +101,25 @@ app.post('/add', (req, res) => {
 app.get('/edit/:id', (req, res) => {
     const id = req.params.id
     db.get('SELECT * FROM data WHERE id = ?', [id], (err, rows) => {
-        res.render('form', { rows })
+        if (err) res.send(err)
+        else res.render('form', { rows })
+    })
+})
+
+app.post('/edit/:id', (req, res) => {
+    const id = req.params.id
+    db.run('UPDATE data SET name = ?, height = ?, weight = ?, birthdate = ?, married = ? WHERE id = ?',
+     [req.body.name, req.body.height, req.body.weight, req.body.birthdate, req.body.isMarried, id], (err) => {
+        if (err) res.send(err)
+        else res.redirect('/')
+    })
+})
+
+app.get('/delete/:id', (req, res) => {
+    const id = req.params.id
+    db.get('DELETE FROM data WHERE id = ?', [id], (err, rows) => {
+        if (err) res.send(err)
+        else res.redirect('/')
     })
 })
 
