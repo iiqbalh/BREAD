@@ -16,66 +16,71 @@ app.use(bodyParser.json())
 
 app.get('/', (req, res) => {
 
-    const { name, height, weight, starDate, endDate, isMarried, search } = req.query;
+    const { page = 1, name, height, weight, starDate, endDate, isMarried, search } = req.query;
 
     const wheres = [];
     const params = [];
-    const count = []
+    const count = [];
+    const limit = 5;
+    const offset = (page - 1) * limit;
 
     if (name) {
         wheres.push('name like "%" || ? || "%"')
         params.push(name)
+        count.push(name)
     }
 
     if (height) {
         wheres.push('height = ?')
         params.push(height)
+        count.push(height)
     }
 
     if (weight) {
         wheres.push('weight = ?')
         params.push(weight)
+        count.push(weight)
     }
 
     if (starDate && endDate) {
-        wheres.push('birthdate BETWEEN ? and ?');
-        params.push(starDate, endDate);
-        count.push(starDate, endDate);
+        wheres.push('birthdate BETWEEN ? and ?')
+        params.push(starDate, endDate)
+        count.push(starDate, endDate)
     } else if (starDate) {
-        wheres.push('birthdate >= ?');
-        params.push(starDate);
-        count.push(starDate);
+        wheres.push('birthdate >= ?')
+        params.push(starDate)
+        count.push(starDate)
     } else if (endDate) {
-        wheres.push('birthdate <= ?');
-        params.push(endDate);
-        count.push(endDate);
+        wheres.push('birthdate <= ?')
+        params.push(endDate)
+        count.push(endDate)
     }
 
     if (isMarried) {
         wheres.push('married = ?')
         params.push(isMarried)
+        count.push(isMarried);
     }
 
-    const page = req.query.page
-    const limit = 5
-    const offset = (page - 1) * limit
-
-    let sql = 'SELECT COUNT(*) AS total FROM data';
-    let sqlCount = 'SELECT * FROM data ORDER BY id LIMIT ? OFFSET ?';
+    let sqlCount = 'SELECT COUNT(*) AS total FROM data';
+    let sql = 'SELECT * FROM data';
 
     if (wheres.length > 0) {
         sql += ` WHERE ${wheres.join(` ${search} `)}`
         sqlCount += ` WHERE ${wheres.join(` ${search} `)}`
     }
 
-    db.all(sql, params, (err, rows) => {
-        if (err) return res.send(err)
-        const total = rows[0].total
-        const pages = math.ceil(total / limit)
+    sql += ' ORDER BY id LIMIT ? OFFSET ?'
+    params.push(limit, offset)
 
-        db.all(sqlCount, [limit, offset], (err, rows) => {
+
+    db.get(sqlCount, count, (err, rows) => {
+        const total = rows.total
+        const pages = Math.ceil(total / limit)
+
+        db.all(sql, params, (err, rows) => {
             if (err) return res.send(err)
-            res.render('read', { rows, pages ,query: req.query })
+            res.render('read', { rows, pages, offset, query: req.query })
         })
     })
 })
@@ -87,9 +92,16 @@ app.get('/add', (req, res) => {
 app.post('/add', (req, res) => {
 
     db.run('INSERT INTO data (name, height, weight, birthdate, married) VALUES (?, ?, ?, ?, ?)',
-     [req.body.name, req.body.height, req.body.weight, req.body.birthdate, req.body.isMarried], (err) => {
-        if(err) res.send(err)
-        else res.redirect('/')
+        [req.body.name, req.body.height, req.body.weight, req.body.birthdate, req.body.isMarried], (err) => {
+            if (err) res.send(err)
+            else res.redirect('/')
+        })
+})
+
+app.get('/edit/:id', (req, res) => {
+    const id = req.params.id
+    db.get('SELECT * FROM data WHERE id = ?', [id], (err, rows) => {
+        res.render('form', { rows })
     })
 })
 
