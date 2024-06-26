@@ -17,7 +17,9 @@
     <div class="container">
         <div class="card text-center">
             <div class="card-header">
-                <h2><%= header %></h2>
+                <h2>
+                    <%= header %>
+                </h2>
             </div>
 
             <form action="" method="post">
@@ -60,7 +62,7 @@
                             Married</label>
 
 
-                        <% if(!rows.married == 1) {%>
+                        <% if(!rows.married==1) {%>
                             <div class="col-sm-10">
                                 <div style="text-align: start;">
                                     <input type="radio" name="isMarried" value="0" style="margin: 5px 5px 5px 0px;"

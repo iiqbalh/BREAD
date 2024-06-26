@@ -99,7 +99,7 @@
                                         style="margin: 5px 5px 5px 15px;" checked />AND
                                     <% } else { %>
                                         <input type="radio" id="or" name="search" value="or"
-                                            style="margin: 5px 5px 5px 0px;" required />OR
+                                            style="margin: 5px 5px 5px 0px;" checked required />OR
                                         <input type="radio" id="and" name="search" value="and"
                                             style="margin: 5px 5px 5px 15px;" />AND
                                         <% } %>
@@ -165,7 +165,7 @@
 
                 <nav aria-label="Page navigation example" style="display: flex; float: right;">
                     <ul class="pagination">
-                        <% if(page > 1) { %>
+                        <% if(page> 1) { %>
                             <li class="page-item">
                                 <a class="page-link" href="<%= url.replace(`page=${page}`, `page=${page - 1}`) %>"
                                     aria-label="Previous">
