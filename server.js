@@ -80,8 +80,9 @@ app.get('/', (req, res) => {
         const pages = Math.ceil(total / limit)
 
         db.all(sql, params, (err, rows) => {
+            console.log(page, pages)
             if (err) res.send(err)
-            else res.render('read', { rows, page, pages, offset, query: req.query, url })
+            else res.render('read', { rows, page: Number(page), pages, offset, query: req.query, url })
         })
     })
 })
