@@ -15,7 +15,7 @@ app.use(bodyParser.json())
 
 
 app.get('/', (req, res) => {
-
+    const url = req.url == '/' ? '/?page=1' : req.url
     const { page = 1, name, height, weight, starDate, endDate, isMarried, search } = req.query;
 
     const wheres = [];
@@ -43,7 +43,7 @@ app.get('/', (req, res) => {
     }
 
     if (starDate && endDate) {
-        wheres.push('birthdate BETWEEN ? and ?')
+        wheres.push(`birthdate BETWEEN ? and ?`)
         params.push(starDate, endDate)
         count.push(starDate, endDate)
     } else if (starDate) {
@@ -73,6 +73,7 @@ app.get('/', (req, res) => {
     sql += ' ORDER BY id LIMIT ? OFFSET ?'
     params.push(limit, offset)
 
+    console.log(sqlCount, count)
 
     db.get(sqlCount, count, (err, rows) => {
         const total = rows.total
@@ -80,13 +81,14 @@ app.get('/', (req, res) => {
 
         db.all(sql, params, (err, rows) => {
             if (err) res.send(err)
-            else res.render('read', { rows, pages, offset, query: req.query })
+            else res.render('read', { rows, page, pages, offset, query: req.query, url })
         })
     })
 })
 
 app.get('/add', (req, res) => {
-    res.render('form', { rows: {} })
+    const header = 'Adding Data'
+    res.render('form', { rows: {}, header })
 })
 
 app.post('/add', (req, res) => {
@@ -100,9 +102,10 @@ app.post('/add', (req, res) => {
 
 app.get('/edit/:id', (req, res) => {
     const id = req.params.id
+    const header = 'Updating Data'
     db.get('SELECT * FROM data WHERE id = ?', [id], (err, rows) => {
         if (err) res.send(err)
-        else res.render('form', { rows })
+        else res.render('form', { rows, header })
     })
 })
 
